@@ -1,0 +1,19 @@
+query date {
+  inlinePython {
+    code(code: "import datetime as dt; print(dt.datetime.now())") {
+      stdout
+    }
+  }
+}
+
+query myIP {
+  inlinePython {
+    withPackage(name: "requests") {
+      code(
+        code: "import requests as r; print(r.get('https://api.ipify.org?format=json').json()['ip'])"
+      ) {
+        stdout
+      }
+    }
+  }
+}
