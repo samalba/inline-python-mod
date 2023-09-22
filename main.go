@@ -15,13 +15,13 @@ func (m *InlinePython) initBaseContainer() {
 	}
 }
 
-func (m *InlinePython) WithPackage(ctx context.Context, name string) (*InlinePython, error) {
+func (m *InlinePython) WithPackage(ctx context.Context, name string) *InlinePython {
 	m.initBaseContainer()
 	m.Ctr = m.Ctr.WithExec([]string{"pip", "install", name})
-	return m, nil
+	return m
 }
 
-func (m *InlinePython) WithPackages(ctx context.Context, packages []string) (*InlinePython, error) {
+func (m *InlinePython) WithPackages(ctx context.Context, packages []string) *InlinePython {
 	// sort the requirements to optimize caching
 	slices.Sort(packages)
 
@@ -29,7 +29,13 @@ func (m *InlinePython) WithPackages(ctx context.Context, packages []string) (*In
 		m.WithPackage(ctx, name)
 	}
 
-	return m, nil
+	return m
+}
+
+func (m *InlinePython) CacheKey(ctx context.Context, key string) *InlinePython {
+	m.initBaseContainer()
+	m.Ctr = m.Ctr.WithEnvVariable("_CACHE_KEY", key)
+	return m
 }
 
 func (m *InlinePython) Code(ctx context.Context, code string) (*Container, error) {
