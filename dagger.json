@@ -1,5 +1,4 @@
 {
-  "root": "",
-  "name": "inlinePython",
+  "name": "inline-python",
   "sdk": "go"
 }
